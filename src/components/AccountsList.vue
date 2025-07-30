@@ -82,7 +82,6 @@
 </template>
 
 <script setup lang="ts">
-// Импорты и логика остаются без изменений
 import { Plus, Delete } from '@element-plus/icons-vue'
 import { storeToRefs } from 'pinia'
 import { useAccountsStore } from '@/stores/accounts'
