@@ -10,6 +10,7 @@ export const useAccountsStore = defineStore('accounts', {
             this.accounts.push({
                 id: crypto.randomUUID(),
                 labels: [],
+                labelsInput: '',
                 type: 'Локальная',
                 login: '',
                 password: ''

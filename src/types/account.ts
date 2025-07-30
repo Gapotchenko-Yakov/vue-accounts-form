@@ -7,6 +7,7 @@ interface Label {
 export interface Account {
     id: string
     labels: Label[]
+    labelsInput: string
     type: AccountType
     login: string
     password: string | null
