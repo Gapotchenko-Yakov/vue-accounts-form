@@ -33,5 +33,5 @@ export const useAccountsStore = defineStore('accounts', {
             if (index !== -1) this.accounts[index] = updated
         }
     },
-    // persist: true
+    persist: true
 })
