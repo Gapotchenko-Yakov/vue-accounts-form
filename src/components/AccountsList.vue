@@ -28,7 +28,7 @@
         <el-input
           v-model="account.labelsInput"
           @blur="parseLabels(account)"
-          placeholder="метка1; метка2"
+          placeholder="метка1;метка2"
         />
       </el-col>
 
@@ -95,7 +95,7 @@ const { addAccount, removeAccount, updateAccount } = store
 // Инициализация временного поля для меток
 accounts.value.forEach(acc => {
   if (!Array.isArray(acc.labels)) acc.labels = []
-  acc.labelsInput = acc.labels.map(l => l.text).join('; ')
+  acc.labelsInput = acc.labels.map(l => l.text).join(';')
 })
 
 const parseLabels = (account: Account) => {
