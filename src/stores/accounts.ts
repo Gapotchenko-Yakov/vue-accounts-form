@@ -1,15 +1,5 @@
+import type { Account } from "@/types/account";
 import { defineStore } from "pinia";
-
-type AccountType = 'LDAP' | 'Локальная'
-
-type Account = {
-    id: string
-    labels: { text: string }[]
-    type: AccountType
-    login: string
-    password: string | null
-}
-
 
 export const useAccountsStore = defineStore('accounts', {
     state: () => ({
