@@ -17,62 +17,15 @@
     </el-row>
 
     <!-- Список учетных записей -->
-    <el-row 
+    <account-item
       v-for="account in accounts" 
       :key="account.id"
+      :account="account"
+      @update="store.updateAccount"
+      @delete="store.removeAccount"
       :gutter="20" 
-      class="account-row"
-    >
-      <!-- Метки -->
-      <el-col :span="5">
-        <el-input
-          v-model="account.labelsInput"
-          @blur="parseLabels(account)"
-          placeholder="метка1;метка2"
-        />
-      </el-col>
-
-      <!-- Тип записи -->
-      <el-col :span="4">
-        <el-select 
-          v-model="account.type" 
-          @change="handleTypeChange(account)"
-          style="width: 100%"
-        >
-          <el-option label="LDAP" value="LDAP" />
-          <el-option label="Локальная" value="Локальная" />
-        </el-select>
-      </el-col>
-
-      <!-- Логин -->
-      <el-col :span="account.type === 'LDAP' ? 8 : 4">
-        <el-input 
-          v-model="account.login" 
-          @blur="updateAccount(account)" 
-        />
-      </el-col>
-
-      <!-- Пароль -->
-      <el-col :span="account.type === 'LDAP' ? 0 : 4">
-        <el-input
-          v-if="account.type === 'Локальная'"
-          v-model="account.password"
-          type="password"
-          @blur="updateAccount(account)"
-        />
-      </el-col>
-
-      <!-- Действия -->
-      <el-col :span="3">
-        <el-button
-          type="danger"
-          :icon="Delete"
-          circle
-          @click="removeAccount(account.id)"
-        />
-      </el-col>
-    </el-row>
-
+    />
+      
     <!-- Пустое состояние -->
     <el-empty 
       v-if="accounts.length === 0" 
@@ -82,35 +35,23 @@
 </template>
 
 <script setup lang="ts">
-import { Plus, Delete } from '@element-plus/icons-vue'
-import { storeToRefs } from 'pinia'
+import  AccountItem  from '@/components/AccountItem.vue'
+import { LABELS_DELIMITER } from '@/const/accounts'
 import { useAccountsStore } from '@/stores/accounts'
-import type { Account } from '@/types/account'
+import { Plus } from '@element-plus/icons-vue'
+import { storeToRefs } from 'pinia'
 
 const store = useAccountsStore()
 const { accounts } = storeToRefs(store)
-const { addAccount, removeAccount, updateAccount } = store
+const { addAccount } = store
 
 // Инициализация временного поля для меток
 accounts.value.forEach(acc => {
   if (!Array.isArray(acc.labels)) acc.labels = []
-  acc.labelsInput = acc.labels.map(l => l.text).join(';')
+  acc.labelsInput = acc.labels.map(l => l.text).join(LABELS_DELIMITER)
 })
 
-const parseLabels = (account: Account) => {
-  account.labels = account.labelsInput
-    .split(';')
-    .map(text => ({ text: text.trim() }))
-    .filter(item => item.text)
-  updateAccount(account)
-}
 
-const handleTypeChange = (account: Account) => {
-  if (account.type === 'LDAP') {
-    account.password = null
-  }
-  updateAccount(account)
-}
 </script>
 
 <style scoped>
@@ -123,13 +64,6 @@ const handleTypeChange = (account: Account) => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-}
-
-.account-row {
-  margin-bottom: 16px;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--el-border-color);
 }
 
 .header-row {

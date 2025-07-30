@@ -1,6 +1,6 @@
 type AccountType = 'LDAP' | 'Локальная'
 
-interface Label {
+export interface Label {
     text: string
 }
 
