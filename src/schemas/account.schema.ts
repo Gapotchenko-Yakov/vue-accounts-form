@@ -11,6 +11,9 @@ export const accountSchema = yup.object({
             'valid-labels',
             VALIDATION_ERRORS.invalidLabelsFormat,
             value => {
+                // TODO: Currently trailing delimiter (e.g. ending with ';') is considered invalid,
+                // which matches provided examples. Need to confirm with client whether trailing
+                // delimiter should be allowed or not, and adjust validation accordingly.
                 if (!value) return true
                 const parts = value.split(LABELS_DELIMITER).map(s => s.trim())
                 return parts.every(p => p.length > 0)
