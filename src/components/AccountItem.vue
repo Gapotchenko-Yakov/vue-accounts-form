@@ -3,16 +3,21 @@
 // because updateAccount only runs on blur.
 // Consider triggering validation on input change or before unmount.
 // Example: User edits field but never blurs before leaving, skipping validation.
+// 
+// NOTE: Not fixing this here because the spec requires validation ONLY on blur.
+// This note is repeated as inline comments referencing this top-level TODO.
 -->
+
 <template>
   <el-row class="account-row">
     <!-- Метки -->
     <el-col :span="5">
       <el-form-item :error="errors.labelsInput">
+        <!-- See TODO at top: handle skipped validation if blur is never triggered -->
+        <!-- Consider adding @input="updateAccount" below -->
         <el-input
           v-model="labelsInput.value.value"
           @blur="updateAccount"
-          @input="updateAccount"
           :placeholder="`метка1${LABELS_DELIMITER}метка2`"
         />
       </el-form-item>
@@ -34,6 +39,8 @@
     <!-- Логин -->
     <el-col :span="type.value.value === 'LDAP' ? 8 : 4">
       <el-form-item :error="errors.login">
+        <!-- See TODO at top: handle skipped validation if blur is never triggered -->
+        <!-- Consider adding @input="updateAccount" below -->
         <el-input 
           v-model="login.value.value" 
           @blur="updateAccount" 
@@ -44,6 +51,8 @@
     <!-- Пароль -->
     <el-col :span="type.value.value === 'LDAP' ? 0 : 4">
       <el-form-item :error="errors.password" v-if="type.value.value === 'Локальная'">
+        <!-- See TODO at top: handle skipped validation if blur is never triggered -->
+        <!-- Consider adding @input="updateAccount" below -->
         <el-input
           v-model="password.value.value"
           type="password"
@@ -145,6 +154,11 @@ const updateAccount = () => {
 const removeAccount = () => {
   emit('delete', props.account.id)
 }
+
+// See TODO at top: handle validation if blur is skipped (on unmount)
+// onBeforeUnmount(() => {
+//   updateAccount()
+// })
 </script>
 
 <style scoped>
