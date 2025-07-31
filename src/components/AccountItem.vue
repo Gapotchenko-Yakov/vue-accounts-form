@@ -53,9 +53,12 @@
 
 <script setup lang="ts">
 import { LABELS_DELIMITER } from '@/const/accounts'
+import { accountSchema } from '@/schemas/account.schema'
 import type { Account, Label } from '@/types/account'
 import { Delete } from '@element-plus/icons-vue'
-import { ref, watch, type PropType } from 'vue'
+import { debounce } from 'lodash-es'
+import { useField, useForm } from 'vee-validate'
+import { computed, type PropType } from 'vue'
 
 const props = defineProps({
   account: {
@@ -66,44 +69,58 @@ const props = defineProps({
 
 const emit = defineEmits(['update', 'delete'])
 
-// Локальная копия для редактирования
-const localAccount = ref({
+const labelsString = props.account.labels.map((l) => l.text).join(LABELS_DELIMITER)
+
+const initialValues = {
   ...props.account,
-  labelsInput: props.account.labels?.map((l:Label) => l.text).join(LABELS_DELIMITER) || ''
-})
-
-// Синхронизация при изменении пропса
-watch(() => props.account, (newAccount) => {
-  localAccount.value = {
-    ...newAccount,
-    labelsInput: newAccount.labels?.map((l:Label) => l.text).join(LABELS_DELIMITER) || ''
-  }
-}, { deep: true })
-
-const parseLabels = () => {
-  const updated = {
-    ...localAccount.value,
-    labels: localAccount.value.labelsInput
-      .split(LABELS_DELIMITER)
-      .map((text: string) => ({ text: text.trim() }))
-      .filter((item: Label) => item.text)
-  }
-  emit('update', updated)
+  labelsInput: labelsString,
 }
 
-const handleTypeChange = () => {
-  if (localAccount.value.type === 'LDAP') {
-    localAccount.value.password = null
+const { handleSubmit, errors } = useForm({
+  validationSchema: accountSchema,
+  initialValues,
+})
+console.log("🚀 ~ errors:", errors)
+
+const labelsInput = useField<string>('labelsInput')
+const type = useField<string>('type')
+const login = useField<string>('login')
+const password = useField<string | null>('password')
+
+
+// TODO: Extract labels <-> labelsInput transformation utils to separate module for reuse (DRY)
+
+const parsedLabels = computed(() => {
+  return labelsInput.value.value
+    .split(LABELS_DELIMITER)
+    .map((text) => ({ text: text.trim() }))
+    .filter((label) => label.text)
+})
+
+const emitUpdate = handleSubmit((values) => {
+  const updated = {
+    ...values,
+    labels: parsedLabels.value,
   }
-  emit('update', localAccount.value)
+  emit('update', updated)
+})
+
+const emitUpdateDebounced = debounce(emitUpdate, 500)
+
+// TODO: Maybe use watch to detect 'type' changes instead of manual handler
+const handleTypeChange = () => {
+  if (type.value.value === 'LDAP') {
+    password.value.value = null
+  }
+  emitUpdateDebounced()
 }
 
 const updateAccount = () => {
-  emit('update', localAccount.value)
+  emitUpdateDebounced()
 }
 
 const removeAccount = () => {
-  emit('delete', localAccount.value.id)
+  emit('delete', props.account.id)
 }
 </script>
 
