@@ -7,6 +7,11 @@
       </el-button>
     </div>
 
+    <el-row class="info-row">
+    <el-icon class="info-icon" size="24"><QuestionFilled /></el-icon>
+    <span>Для указания нескольких меток для одной пары логин/пароль используйте разделитель <b>;</b></span>
+  </el-row>
+
     <!-- Шапка списка -->
     <el-row :gutter="20" class="account-row header-row">
       <el-col :span="5">Метки</el-col>
@@ -38,7 +43,7 @@
 import  AccountItem  from '@/components/AccountItem.vue'
 import { LABELS_DELIMITER } from '@/const/accounts'
 import { useAccountsStore } from '@/stores/accounts'
-import { Plus } from '@element-plus/icons-vue'
+import { Plus, QuestionFilled } from '@element-plus/icons-vue'
 import { storeToRefs } from 'pinia'
 
 const store = useAccountsStore()
@@ -75,6 +80,17 @@ accounts.value.forEach(acc => {
 .empty-field {
   color: var(--el-text-color-secondary);
   padding: 0 12px;
+}
+
+.info-row {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.info-icon {
+  margin-right: 12px;
+  flex-shrink: 0;
 }
 
 .el-input, .el-select {
