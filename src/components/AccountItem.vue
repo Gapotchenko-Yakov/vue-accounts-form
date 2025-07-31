@@ -87,8 +87,8 @@ const initialValues = {
 const { handleSubmit, errors } = useForm({
   validationSchema: accountSchema,
   initialValues,
+  validateOnMount: true
 })
-console.log("🚀 ~ errors:", errors)
 
 const labelsInput = useField<string>('labelsInput')
 const type = useField<string>('type')
