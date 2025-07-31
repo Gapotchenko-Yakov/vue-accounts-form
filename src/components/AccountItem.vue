@@ -1,3 +1,9 @@
+<!--
+// TODO: Handle edge cases where validation might be skipped
+// because updateAccount only runs on blur.
+// Consider triggering validation on input change or before unmount.
+// Example: User edits field but never blurs before leaving, skipping validation.
+-->
 <template>
   <el-row class="account-row">
     <!-- Метки -->
@@ -6,6 +12,7 @@
         <el-input
           v-model="labelsInput.value.value"
           @blur="updateAccount"
+          @input="updateAccount"
           :placeholder="`метка1${LABELS_DELIMITER}метка2`"
         />
       </el-form-item>
@@ -90,10 +97,18 @@ const { handleSubmit, errors } = useForm({
   validateOnMount: true
 })
 
-const labelsInput = useField<string>('labelsInput')
-const type = useField<string>('type')
-const login = useField<string>('login')
-const password = useField<string | null>('password')
+const labelsInput = useField<string>('labelsInput', undefined, {
+  validateOnValueUpdate: false,
+})
+const type = useField<string>('type', undefined, {
+  validateOnValueUpdate: false,
+})
+const login = useField<string>('login', undefined, {
+  validateOnValueUpdate: false,
+})
+const password = useField<string | null>('password', undefined, {
+  validateOnValueUpdate: false,
+})
 
 
 // TODO: Extract labels <-> labelsInput transformation utils to separate module for reuse (DRY)
