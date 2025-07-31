@@ -134,18 +134,32 @@ const removeAccount = () => {
 
 <style scoped>
 .account-row {
-  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   padding: 12px 0;
-  border-bottom: 1px solid var(--el-border-color);
+  margin-bottom: 16px;
+}
+
+/* Убираем лишний отступ у el-form-item */
+.account-row :deep(.el-form-item) {
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
 }
 
 .empty-field {
   color: var(--el-text-color-secondary);
   padding: 0 12px;
+  line-height: 32px; /* чтобы был по высоте как input */
 }
 
 .el-input, .el-select {
   width: 100%;
 }
+
+.account-row .el-button {
+  align-self: center;
+}
+
 </style>
