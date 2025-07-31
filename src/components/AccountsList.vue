@@ -14,7 +14,7 @@
 
     <!-- Шапка списка -->
     <el-row :gutter="20" class="account-row header-row">
-      <el-col :span="5">Метки</el-col>
+      <el-col :span="6">Метки</el-col>
       <el-col :span="4">Тип записи</el-col>
       <el-col :span="4">Логин</el-col>
       <el-col :span="4">Пароль</el-col>

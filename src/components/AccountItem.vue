@@ -11,7 +11,7 @@
 <template>
   <el-row class="account-row">
     <!-- Метки -->
-    <el-col :span="5">
+    <el-col :span="6">
       <el-form-item :error="errors.labelsInput">
         <!-- See TODO at top: handle skipped validation if blur is never triggered -->
         <!-- Consider adding @input="emitUpdateDebounced" below -->
