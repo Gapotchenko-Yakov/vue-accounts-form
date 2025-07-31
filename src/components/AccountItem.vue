@@ -3,8 +3,8 @@
     <!-- Метки -->
     <el-col :span="5">
       <el-input
-        v-model="localAccount.labelsInput"
-        @blur="parseLabels"
+        v-model="labelsInput.value.value"
+        @blur="updateAccount"
         :placeholder="`метка1${LABELS_DELIMITER}метка2`"
       />
     </el-col>
@@ -12,7 +12,7 @@
     <!-- Тип записи -->
     <el-col :span="4">
       <el-select 
-        v-model="localAccount.type" 
+        v-model="type.value.value" 
         @change="handleTypeChange"
       >
         <el-option label="LDAP" value="LDAP" />
@@ -21,18 +21,18 @@
     </el-col>
 
     <!-- Логин -->
-    <el-col :span="localAccount.type === 'LDAP' ? 8 : 4">
+    <el-col :span="type.value.value === 'LDAP' ? 8 : 4">
       <el-input 
-        v-model="localAccount.login" 
+        v-model="login.value.value" 
         @blur="updateAccount" 
       />
     </el-col>
 
     <!-- Пароль -->
-    <el-col :span="localAccount.type === 'LDAP' ? 0 : 4">
+    <el-col :span="type.value.value === 'LDAP' ? 0 : 4">
       <el-input
-        v-if="localAccount.type === 'Локальная'"
-        v-model="localAccount.password"
+        v-if="type.value.value === 'Локальная'"
+        v-model="password.value.value"
         type="password"
         @blur="updateAccount"
       />
@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { LABELS_DELIMITER } from '@/const/accounts'
 import { accountSchema } from '@/schemas/account.schema'
-import type { Account, Label } from '@/types/account'
+import type { Account } from '@/types/account'
 import { Delete } from '@element-plus/icons-vue'
 import { debounce } from 'lodash-es'
 import { useField, useForm } from 'vee-validate'
