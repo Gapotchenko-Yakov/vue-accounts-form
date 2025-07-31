@@ -82,7 +82,7 @@ import type { Account } from '@/types/account'
 import { Delete } from '@element-plus/icons-vue'
 // import { debounce } from 'lodash-es'
 import { useField, useForm } from 'vee-validate'
-import { computed, type PropType } from 'vue'
+import { computed, watch, type PropType } from 'vue'
 
 const props = defineProps({
   account: {
@@ -109,6 +109,16 @@ const { handleSubmit, errors } = useForm({
 const labelsInput = useField<string>('labelsInput', undefined, {
   validateOnValueUpdate: false,
 })
+watch(
+  () => props.account.labels,
+  (newLabels) => {
+    const newLabelsInput = newLabels.map(l => l.text).join(LABELS_DELIMITER)
+    if (labelsInput.value.value !== newLabelsInput) {
+      labelsInput.value.value = newLabelsInput
+    }
+  },
+  { immediate: true, deep: true }
+)
 const type = useField<string>('type', undefined, {
   validateOnValueUpdate: false,
 })
