@@ -1,6 +1,6 @@
 <!--
 // TODO: Handle edge cases where validation might be skipped
-// because updateAccount only runs on blur.
+// because emitUpdate only runs on blur.
 // Consider triggering validation on input change or before unmount.
 // Example: User edits field but never blurs before leaving, skipping validation.
 // 
@@ -14,10 +14,10 @@
     <el-col :span="5">
       <el-form-item :error="errors.labelsInput">
         <!-- See TODO at top: handle skipped validation if blur is never triggered -->
-        <!-- Consider adding @input="updateAccount" below -->
+        <!-- Consider adding @input="emitUpdateDebounced" below -->
         <el-input
           v-model="labelsInput.value.value"
-          @blur="updateAccount"
+          @blur="emitUpdate"
           :placeholder="`метка1${LABELS_DELIMITER}метка2`"
         />
       </el-form-item>
@@ -40,10 +40,10 @@
     <el-col :span="type.value.value === 'LDAP' ? 8 : 4">
       <el-form-item :error="errors.login">
         <!-- See TODO at top: handle skipped validation if blur is never triggered -->
-        <!-- Consider adding @input="updateAccount" below -->
+        <!-- Consider adding @input="emitUpdateDebounced" below -->
         <el-input 
           v-model="login.value.value" 
-          @blur="updateAccount" 
+          @blur="emitUpdate" 
         />
       </el-form-item>
     </el-col>
@@ -52,12 +52,12 @@
     <el-col :span="type.value.value === 'LDAP' ? 0 : 4">
       <el-form-item :error="errors.password" v-if="type.value.value === 'Локальная'">
         <!-- See TODO at top: handle skipped validation if blur is never triggered -->
-        <!-- Consider adding @input="updateAccount" below -->
+        <!-- Consider adding @input="emitUpdateDebounced" below -->
         <el-input
           v-model="password.value.value"
           type="password"
           show-password
-          @blur="updateAccount"
+          @blur="emitUpdate"
         />
       </el-form-item>
       <span v-else class="empty-field">—</span>
@@ -137,19 +137,17 @@ const emitUpdate = handleSubmit((values) => {
   emit('update', updated)
 })
 
-const emitUpdateDebounced = debounce(emitUpdate, 500)
+// for debounced input handlers
+// const emitUpdateDebounced = debounce(emitUpdate, 500)
 
 // TODO: Maybe use watch to detect 'type' changes instead of manual handler
 const handleTypeChange = () => {
   if (type.value.value === 'LDAP') {
     password.value.value = null
   }
-  emitUpdateDebounced()
+  emitUpdate()
 }
 
-const updateAccount = () => {
-  emitUpdateDebounced()
-}
 
 const removeAccount = () => {
   emit('delete', props.account.id)
@@ -157,7 +155,7 @@ const removeAccount = () => {
 
 // See TODO at top: handle validation if blur is skipped (on unmount)
 // onBeforeUnmount(() => {
-//   updateAccount()
+//   emitUpdate()
 // })
 </script>
 
