@@ -2,40 +2,48 @@
   <el-row class="account-row">
     <!-- Метки -->
     <el-col :span="5">
-      <el-input
-        v-model="labelsInput.value.value"
-        @blur="updateAccount"
-        :placeholder="`метка1${LABELS_DELIMITER}метка2`"
-      />
+      <el-form-item :error="errors.labelsInput">
+        <el-input
+          v-model="labelsInput.value.value"
+          @blur="updateAccount"
+          :placeholder="`метка1${LABELS_DELIMITER}метка2`"
+        />
+      </el-form-item>
     </el-col>
 
     <!-- Тип записи -->
     <el-col :span="4">
-      <el-select 
-        v-model="type.value.value" 
-        @change="handleTypeChange"
-      >
-        <el-option label="LDAP" value="LDAP" />
-        <el-option label="Локальная" value="Локальная" />
-      </el-select>
+      <el-form-item :error="errors.type">
+        <el-select 
+          v-model="type.value.value" 
+          @change="handleTypeChange"
+        >
+          <el-option label="LDAP" value="LDAP" />
+          <el-option label="Локальная" value="Локальная" />
+        </el-select>
+      </el-form-item>
     </el-col>
 
     <!-- Логин -->
     <el-col :span="type.value.value === 'LDAP' ? 8 : 4">
-      <el-input 
-        v-model="login.value.value" 
-        @blur="updateAccount" 
-      />
+      <el-form-item :error="errors.login">
+        <el-input 
+          v-model="login.value.value" 
+          @blur="updateAccount" 
+        />
+      </el-form-item>
     </el-col>
 
     <!-- Пароль -->
     <el-col :span="type.value.value === 'LDAP' ? 0 : 4">
-      <el-input
-        v-if="type.value.value === 'Локальная'"
-        v-model="password.value.value"
-        type="password"
-        @blur="updateAccount"
-      />
+      <el-form-item :error="errors.password" v-if="type.value.value === 'Локальная'">
+        <el-input
+          v-model="password.value.value"
+          type="password"
+          show-password
+          @blur="updateAccount"
+        />
+      </el-form-item>
       <span v-else class="empty-field">—</span>
     </el-col>
 
