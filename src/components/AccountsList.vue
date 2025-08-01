@@ -1,4 +1,5 @@
 <template>
+<!-- TODO: Extract AccountPage component when using multipage SPA with router -->
   <div class="accounts-list">
     <div class="list-header">
       <h2>Учетные записи</h2>
