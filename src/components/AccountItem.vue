@@ -11,7 +11,7 @@
 <template>
   <el-row class="account-row">
     <!-- Метки -->
-    <el-col :span="6">
+    <el-col :span="8">
       <el-form-item :error="errors.labelsInput">
         <!-- See TODO at top: handle skipped validation if blur is never triggered -->
         <!-- Consider adding @input="emitUpdateDebounced" below -->
@@ -37,7 +37,7 @@
     </el-col>
 
     <!-- Логин -->
-    <el-col :span="type.value.value === 'LDAP' ? 8 : 4">
+    <el-col :span="type.value.value === 'LDAP' ? 10 : 5">
       <el-form-item :error="errors.login">
         <!-- See TODO at top: handle skipped validation if blur is never triggered -->
         <!-- Consider adding @input="emitUpdateDebounced" below -->
@@ -49,7 +49,7 @@
     </el-col>
 
     <!-- Пароль -->
-    <el-col :span="type.value.value === 'LDAP' ? 0 : 4">
+    <el-col :span="type.value.value === 'LDAP' ? 0 : 5">
       <el-form-item :error="errors.password" v-if="type.value.value === 'Локальная'">
         <!-- See TODO at top: handle skipped validation if blur is never triggered -->
         <!-- Consider adding @input="emitUpdateDebounced" below -->
@@ -64,7 +64,7 @@
     </el-col>
 
     <!-- Действия -->
-    <el-col :span="3">
+    <el-col :span="2">
       <el-button
         type="danger"
         :icon="Delete"
